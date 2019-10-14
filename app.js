@@ -10,7 +10,10 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/archioweb-rest-api');
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/archioweb-rest-api', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
