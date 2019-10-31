@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // Define the schema for users
 const guessSchema = new Schema({
-  thumbnail_id: Number,
-  user_id: Number,
+  thumbnail_id: ObjectId,
+  user_id: ObjectId,
   latitude: Number,
   longitude: Number,
   score: Number,
