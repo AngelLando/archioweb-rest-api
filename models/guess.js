@@ -11,4 +11,4 @@ const guessSchema = new Schema({
 
 });
 // Create the model from the schema and export it
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Guess', guessSchema);
