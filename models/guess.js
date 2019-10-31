@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 // Define the schema for users
 const guessSchema = new Schema({
   thumbnail_id: ObjectId,
