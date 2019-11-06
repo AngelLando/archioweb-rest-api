@@ -24,12 +24,12 @@ const userSchema = new Schema({
 });
 
 /**
- * Given a name, calls the callback function with true if no person exists with that name
- * (or the only person that exists is the same as the person being validated).
+ * Given a name, calls the callback function with true if no user exists with that username
+ * (or the only user that exists is the same as the user being validated).
  */
 function validateUsernameUniqueness(value) {
-  return this.constructor.findOne().where('username').equals(value).exec().then((existingPerson) => {
-    return !existingPerson || existingPerson._id.equals(this._id);
+  return this.constructor.findOne().where('username').equals(value).exec().then((existingUser) => {
+    return !existingUser || existingUser._id.equals(this._id);
   });
 }
 
