@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
     res.send(guesses);
   });
 });
-module.exports = router;
 
 /* POST new guess */
 router.post('/', function(req, res, next) {
@@ -25,3 +24,5 @@ router.post('/', function(req, res, next) {
     res.send(savedGuess);
   });
 });
+
+module.exports = router;
