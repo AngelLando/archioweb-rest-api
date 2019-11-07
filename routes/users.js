@@ -81,7 +81,7 @@ function loadUserFromParamsMiddleware(req, res, next) {
 
   const userId = req.params.id;
   if (!ObjectId.isValid(userId)) {
-    return personNotFound(res, userId);
+    return userNotFound(res, userId);
   }
 
   User.findById(req.params.id, function(err, user) {
