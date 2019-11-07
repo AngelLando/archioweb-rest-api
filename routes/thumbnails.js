@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const debug = require('debug')('geo:thumbnails');
 const ObjectId = mongoose.Types.ObjectId;
 const utils = require('./utils');
+const Guess = require('../models/guess');
 
 
 /* GET thumbnails listing. */
@@ -65,15 +66,26 @@ function thumbnailNotFound(res, thumbnailId) {
 
 /*DELETE thumbnail*/
 router.delete('/:id', loadThumbnailFromParamsMiddleware, function (req, res, next) {
-  req.thumbnail.remove(function (err) {
-    if (err) {
-      return next(err);
-    }
 
-    debug(`Deleted thumbnail "${req.thumbnail.title}"`);
-    res.sendStatus(204);
-  });
-});
+
+
+    req.thumbnail.remove(function (err) {
+      if (err) {
+        return next(err);
+      }
+//requête pour effacer les guess puis renvoyer 204
+Guess.remove({ thumbnail_id:req.thumbnail._id }, function(err){
+    if (err) {
+        return next(err);
+      }
+            debug(`Deleted thumbnail "${req.thumbnail.title}"`);
+      res.sendStatus(204);
+})
+//Character.remove({ name: 'Eddard Stark' }, function)
+
+    });
+        });
+
 
 /*PATCH thumbnail*/
 router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, function (req, res, next) {
@@ -82,6 +94,8 @@ router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, funct
   if (req.body.title !== undefined) {
     req.thumbnail.title = req.body.title;
   }
+
+
 
   req.thumbnail.save(function (err, savedThumbnail) {
     if (err) {
