@@ -80,6 +80,26 @@ router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
     });
   });
 
+/* Authenticate a user */
+router.post('/login', function(req, res, next) {
+  User.findOne({ username: req.body.username }).exec(function(err, user) {
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return res.sendStatus(401);
+    }
+    bcrypt.compare(req.body.password, user.password, function(err, valid) {
+      if (err) {
+        return next(err);
+      } else if (!valid) {
+        return res.sendStatus(401);
+      }
+      // Login is valid...
+      res.send(`Welcome ${user.username}!`);
+    });
+  })
+});
+
 /**
  * Middleware that loads the user corresponding to the ID in the URL path.
  * Responds with 404 Not Found if the ID is not valid or the user doesn't exist.
