@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const Guess = require('../models/guess');
+const mongoose = require('mongoose');
+const debug = require('debug')('geo:guesses');
+const ObjectId = mongoose.Types.ObjectId;
 
 /* GET guesses listing. */
 router.get('/', function(req, res, next) {
