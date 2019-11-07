@@ -6,6 +6,8 @@ const ObjectId = mongoose.Types.ObjectId;
 const User = require('../models/user');
 const utils = require('./utils');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY || 'changeme';
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -94,6 +96,12 @@ router.post('/login', function(req, res, next) {
       } else if (!valid) {
         return res.sendStatus(401);
       }
+      const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
+      const claims = { sub: user._id.toString(), exp: exp };
+      jwt.sign(claims, secretKey, function(err, token) {
+        if (err) { return next(err); }
+        res.send({ token: token }); // Send the token to the client.
+      });
       // Login is valid...
       res.send(`Welcome ${user.username}!`);
     });
