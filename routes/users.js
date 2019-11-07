@@ -42,13 +42,13 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(r
 
   // Update properties present in the request body
   if (req.body.username !== undefined) {
-    req.user.username = req.user.username;
+    req.user.username = req.body.username;
   }
   if (req.body.password !== undefined) {
-    req.user.password = req.user.password;
+    req.user.password = req.body.password;
   }
   if (req.body.created_at !== undefined) {
-    req.user.created_at = req.user.created_at;
+    req.user.created_at = req.body.created_at;
   }
 
   req.user.save(function(err, savedUser) {
