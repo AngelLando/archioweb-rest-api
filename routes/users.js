@@ -41,10 +41,10 @@ router.post('/', function(req, res, next) {
 router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(req, res, next) {
 
   // Update properties present in the request body
-  if (req.body.name !== undefined) {
+  if (req.body.username !== undefined) {
     req.user.username = req.user.username;
   }
-  if (req.body.gender !== undefined) {
+  if (req.body.password !== undefined) {
     req.user.password = req.user.password;
   }
   if (req.body.created_at !== undefined) {
