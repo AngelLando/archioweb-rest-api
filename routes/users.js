@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const User = require('../models/user');
 const utils = require('./utils');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY || 'changeme';
 
 /*GET users listing. *//*
 router.get('/', function(req, res, next) {
@@ -17,16 +20,23 @@ router.get('/', function(req, res, next) {
 });*/
 
 /* POST new user */
-router.post('/', function(req, res, next) {
-  // Create a new document from the JSON in the request body
-  const newUser = new User(req.body);
-  // Save that document
-  newUser.save(function(err, savedUser) {
+router.post('/', utils.authenticate, function(req, res, next) {
+  bcrypt.hash(req.body.password, 10, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
-    // Send the saved document in the response
-    res.send(savedUser);
+
+    // Create a new document from the JSON in the request body
+    const newUser = new User(req.body);
+    newUser.password = hashedPassword;
+    // Save that document
+    newUser.save(function(err, savedUser) {
+      if (err) {
+        return next(err);
+      }
+      // Send the saved document in the response
+      res.send(savedUser);
+    });
   });
 });
 
@@ -126,7 +136,7 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(r
 });
 
 /* DELETE a user */
-router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
+router.delete('/:id', loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
     req.user.remove(function(err) {
       if (err) {
         return next(err);
@@ -136,6 +146,62 @@ router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
       res.sendStatus(204);
     });
   });
+
+/* Register a user */
+router.post('/register', function(req, res, next){
+  User.find({ username: req.body.username })
+  .exec()
+  .then(user => {
+    if (user.length >= 1) {
+      return res.status(409).json({
+        message: "Username already exists"
+      });
+    } else {
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        if (err) {
+          return next(err);
+        } else {
+          const user = new User({
+            _id: new mongoose.Types.ObjectId(),
+            username: req.body.username,
+            password: hashedPassword
+          });
+          user.save(function(err, savedUser) {
+            if (err) {
+              return next(err);
+            }
+            debug(`User "${savedUser.username}" created`);
+            res.send(savedUser);
+          });
+        }
+      });
+    }
+  });
+});
+
+/* Authenticate a user */
+router.post('/login', function(req, res, next) {
+  User.findOne({ username: req.body.username }).exec(function(err, user) {
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return res.sendStatus(401);
+    }
+    bcrypt.compare(req.body.password, user.password, function(err, valid) {
+      if (err) {
+        return next(err);
+      } else if (!valid) {
+        return res.sendStatus(401);
+      }
+      const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
+      const claims = { sub: user._id.toString(), exp: exp };
+      jwt.sign(claims, secretKey, function(err, token) {
+        if (err) { return next(err); }
+        res.send({ token: token }); // Send the token to the client.
+      });
+    });
+  })
+});
 
 /**
  * Middleware that loads the user corresponding to the ID in the URL path.
