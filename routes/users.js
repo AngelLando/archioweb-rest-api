@@ -28,9 +28,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 /* POST new user */
 router.post('/', utils.authenticate, function(req, res, next) {
-  const plainPassword = req.body.password;
-  const saltRounds = 10;
-  bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+  bcrypt.hash(req.body.password, 10, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
@@ -81,6 +79,38 @@ router.delete('/:id', loadUserFromParamsMiddleware, utils.authenticate, function
       res.sendStatus(204);
     });
   });
+
+/* Register a user */
+router.post('/register', function(req, res, next){
+  User.find({ username: req.body.username })
+  .exec()
+  .then(user => {
+    if (user.length >= 1) {
+      return res.status(409).json({
+        message: "Username already exists"
+      });
+    } else {
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        if (err) {
+          return next(err);
+        } else {
+          const user = new User({
+            _id: new mongoose.Types.ObjectId(),
+            username: req.body.username,
+            password: hashedPassword
+          });
+          user.save(function(err, savedUser) {
+            if (err) {
+              return next(err);
+            }
+            debug(`User "${savedUser.username}" created`);
+            res.send(savedUser);
+          });
+        }
+      });
+    }
+  });
+});
 
 /* Authenticate a user */
 router.post('/login', function(req, res, next) {
