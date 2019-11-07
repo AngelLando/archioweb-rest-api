@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 // Define the schema for users
 const thumbnailSchema = new Schema({
   title: String,
+  	user_id: Schema.Types.ObjectId,
   img: { data: Buffer, contentType: String },
 	location: {
 		type: {
