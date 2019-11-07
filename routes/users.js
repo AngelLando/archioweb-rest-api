@@ -47,9 +47,6 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(r
   if (req.body.password !== undefined) {
     req.user.password = req.body.password;
   }
-  if (req.body.created_at !== undefined) {
-    req.user.created_at = req.body.created_at;
-  }
 
   req.user.save(function(err, savedUser) {
     if (err) {
