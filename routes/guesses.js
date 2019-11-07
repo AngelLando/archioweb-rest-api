@@ -25,4 +25,16 @@ router.post('/', function(req, res, next) {
   });
 });
 
+/*DELETE thumbnail*/
+router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
+  req.guess.remove(function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    debug(`Deleted guess "${req.guess.created_at}"`);
+    res.sendStatus(204);
+  });
+});
+
 module.exports = router;
