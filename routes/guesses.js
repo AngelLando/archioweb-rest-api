@@ -1,11 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const Guess = require('../models/guess');
-const mongoose = require('mongoose');
-const debug = require('debug')('geo:guesses');
-const ObjectId = mongoose.Types.ObjectId;
-const utils = require('./utils');
-
 
 /* GET guesses listing. */
 router.get('/', function(req, res, next) {
@@ -65,24 +60,6 @@ router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
 
     debug(`Deleted guess "${req.guess.created_at}"`);
     res.sendStatus(204);
-  });
-});
-
-/*PATCH guess*/
-router.patch('/:id', utils.requireJson, loadGuessFromParamsMiddleware, function (req, res, next) {
-
-  // Update only properties present in the request body
-  if (req.body.title !== undefined) {
-    req.guess.title = req.body.title;
-  }
-
-  req.guess.save(function (err, savedGuess) {
-    if (err) {
-      return next(err);
-    }
-
-    debug(`Updated guess "${savedGuess.title}"`);
-    res.send(savedGuess);
   });
 });
 
