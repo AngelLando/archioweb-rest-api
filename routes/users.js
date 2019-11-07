@@ -1,4 +1,4 @@
-const debug = require('debug')('demo:user');
+const debug = require('debug')('geo:user');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
@@ -36,6 +36,31 @@ router.post('/', function(req, res, next) {
   });
 });
 
+/* PATCH a user */
+router.patch('/:id', utils.requireJson, loadPersonFromParamsMiddleware, function(req, res, next) {
+
+  // Update properties present in the request body
+  if (req.body.name !== undefined) {
+    req.user.username = req.user.username;
+  }
+  if (req.body.gender !== undefined) {
+    req.user.password = req.user.password;
+  }
+  if (req.body.created_at !== undefined) {
+    req.user.created_at = req.user.created_at;
+  }
+
+  req.user.save(function(err, savedUser) {
+    if (err) {
+      return next(err);
+    }
+
+    debug(`Updated user "${savedUser.username}"`);
+    res.send(savedUser);
+  });
+});
+
+/* DELETE a user */
 router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
     req.user.remove(function(err) {
       if (err) {
