@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Guess = require('../models/guess');
 const mongoose = require('mongoose');
-const debug = require('debug')('geo:thumbnails');
+const debug = require('debug')('geo:guesses');
 const ObjectId = mongoose.Types.ObjectId;
 const utils = require('./utils');
 
