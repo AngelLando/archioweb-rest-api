@@ -55,6 +55,7 @@ exports.addLinkHeader = function(resourceHref, page, pageSize, total, res) {
   if (Object.keys(links).length >= 1) {
     res.set('Link', formatLinkHeader(links));
   }
+};
 
 /* JWT authentication middleware */
  exports.authenticate = function (req, res, next) {
@@ -78,4 +79,4 @@ exports.addLinkHeader = function(resourceHref, page, pageSize, total, res) {
       next(); // Pass the ID of the authenticated user to the next middleware.
     }
   });
-}
+};
