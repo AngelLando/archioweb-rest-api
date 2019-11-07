@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 });*/
 
 /* POST new user */
-router.post('/', utils.authenticate, function(req, res, next) {
+router.post('/', function(req, res, next) {
   bcrypt.hash(req.body.password, 10, function(err, hashedPassword) {
     if (err) {
       return next(err);
