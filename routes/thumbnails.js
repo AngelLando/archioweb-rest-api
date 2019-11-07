@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 const Thumbnail = require('../models/thumbnail');
 const mongoose = require('mongoose');
-const debug = require('debug')('demo:movies');
+const debug = require('debug')('geo:thumbnails');
 const ObjectId = mongoose.Types.ObjectId;
+const utils = require('./utils');
+
 
 /* GET thumbnails listing. */
 router.get('/', function(req, res, next) {
@@ -70,6 +72,24 @@ router.delete('/:id', loadThumbnailFromParamsMiddleware, function (req, res, nex
 
     debug(`Deleted thumbnail "${req.thumbnail.title}"`);
     res.sendStatus(204);
+  });
+});
+
+/*PATCH thumbnail*/
+router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, function (req, res, next) {
+
+  // Update only properties present in the request body
+  if (req.body.title !== undefined) {
+    req.thumbnail.title = req.body.title;
+  }
+
+  req.thumbnail.save(function (err, savedThumbnail) {
+    if (err) {
+      return next(err);
+    }
+
+    debug(`Updated thumbnail "${savedThumbnail.title}"`);
+    res.send(savedThumbnail);
   });
 });
 
