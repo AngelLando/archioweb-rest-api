@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const User = require('../models/user');
 const utils = require('./utils');
+const bcrypt = require('bcrypt');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -25,15 +26,24 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 /* POST new user */
 router.post('/', function(req, res, next) {
-  // Create a new document from the JSON in the request body
-  const newUser = new User(req.body);
-  // Save that document
-  newUser.save(function(err, savedUser) {
+  const plainPassword = req.body.password;
+  const saltRounds = 10;
+  bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
-    // Send the saved document in the response
-    res.send(savedUser);
+
+    // Create a new document from the JSON in the request body
+    const newUser = new User(req.body);
+    newUser.password = hashedPassword;
+    // Save that document
+    newUser.save(function(err, savedUser) {
+      if (err) {
+        return next(err);
+      }
+      // Send the saved document in the response
+      res.send(savedUser);
+    });
   });
 });
 

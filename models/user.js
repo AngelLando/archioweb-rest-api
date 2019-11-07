@@ -23,6 +23,17 @@ const userSchema = new Schema({
   created_at: { type: Date, default: Date.now }
 });
 
+/* Hiding the password hash from API responses */
+userSchema.set('toJSON', {
+  transform: transformJsonUser
+});
+
+function transformJsonUser(doc, json, options) {
+ // Remove the hashed password from the generated JSON.
+ delete json.password;
+ return json;
+}
+
 /**
  * Given a name, calls the callback function with true if no user exists with that username
  * (or the only user that exists is the same as the user being validated).
