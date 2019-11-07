@@ -1,9 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Guess = require('../models/guess');
+
 // Define the schema for users
 const thumbnailSchema = new Schema({
   title: String,
-  user_id: Schema.Types.ObjectId,
+ user_id:{
+		type: Schema.Types.ObjectId,
+		validate:{
+			validator: validateUserDependency,
+				message: '{VALUE} doesnt have a linked existing user'
+		}
+	} ,
   img: { data: Buffer, contentType: String },
   location: {
 	  	type: {
@@ -30,6 +38,12 @@ thumbnailSchema.index({ location: '2dsphere' });
 function validateGeoJsonCoordinates(value) {
   return Array.isArray(value) && value.length >= 2 && value.length <= 3 && value[0] >= -180 && value[0] <= 180 && value[1] >= -90 && value[1] <= 90;
 }
+
+function validateUserDependency (value){
+	//requête pour voir si l'ID est relié à qqchose
+		return User.findOne({ _id: value }).select("id");
+}
+
 // Create the model from the schema and export it
 module.exports = mongoose.model('Thumbnail', thumbnailSchema);
 
