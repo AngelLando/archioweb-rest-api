@@ -4,6 +4,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const User = require('../models/user');
+const utils = require('./utils');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -37,7 +38,7 @@ router.post('/', function(req, res, next) {
 });
 
 /* PATCH a user */
-router.patch('/:id', utils.requireJson, loadPersonFromParamsMiddleware, function(req, res, next) {
+router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(req, res, next) {
 
   // Update properties present in the request body
   if (req.body.name !== undefined) {
