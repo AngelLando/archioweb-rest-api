@@ -62,4 +62,3 @@ function validateUserDependency (value){
 }
 // Create the model from the schema and export it
 module.exports = mongoose.model('Guess', guessSchema);
-
