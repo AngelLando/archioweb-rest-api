@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY || 'changeme';
+
 /**
  * Responds with 415 Unsupported Media Type if the request does not have the Content-Type application/json.
  */

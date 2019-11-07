@@ -27,7 +27,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
   });
 
 /* POST new user */
-router.post('/', function(req, res, next) {
+router.post('/', utils.authenticate, function(req, res, next) {
   const plainPassword = req.body.password;
   const saltRounds = 10;
   bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
@@ -71,7 +71,7 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(r
 });
 
 /* DELETE a user */
-router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
+router.delete('/:id', loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
     req.user.remove(function(err) {
       if (err) {
         return next(err);
@@ -102,8 +102,6 @@ router.post('/login', function(req, res, next) {
         if (err) { return next(err); }
         res.send({ token: token }); // Send the token to the client.
       });
-      // Login is valid...
-      res.send(`Welcome ${user.username}!`);
     });
   })
 });
