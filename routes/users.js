@@ -36,6 +36,17 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.delete('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
+    req.user.remove(function(err) {
+      if (err) {
+        return next(err);
+      }
+
+      debug(`Deleted user "${req.user.username}"`);
+      res.sendStatus(204);
+    });
+  });
+
 /**
  * Middleware that loads the user corresponding to the ID in the URL path.
  * Responds with 404 Not Found if the ID is not valid or the user doesn't exist.
