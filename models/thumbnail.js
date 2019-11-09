@@ -1,18 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Guess = require('../models/guess');
+const User = require('../models/user');
+
 
 // Define the schema for users
 const thumbnailSchema = new Schema({
   title: String,
  user_id:{
 		type: Schema.Types.ObjectId,
+		required:true,
 		validate:{
 			validator: validateUserDependency,
 				message: '{VALUE} doesnt have a linked existing user'
 		}
 	} ,
-  img: { data: Buffer, contentType: String },
+  img: { data: Buffer,
+   contentType: String ,
+},
   location: {
 	  	type: {
 			type: String,
