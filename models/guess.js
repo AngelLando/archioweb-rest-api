@@ -65,9 +65,6 @@ function validateUserDependency (value){
 				return !existingThumbnail.user_id.equals(this.user_id);
 			});
 
-	//requête pour voir si l'ID est relié à qqchose
-	//return User.findOne({ _id: value }).select("id");
-
 }
 // Create the model from the schema and export it
 module.exports = mongoose.model('Guess', guessSchema);

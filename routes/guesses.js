@@ -7,7 +7,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 /* GET guesses listing. */
 router.get('/', function(req, res, next) {
-  Guess.find().sort('created_at').exec(function(err, guesses) {
+     let query = queryGuesses(req);
+  query.exec(function(err, guesses) {
     if (err) {
       return next(err);
     }
@@ -65,5 +66,22 @@ router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
     res.sendStatus(204);
   });
 });
+
+function queryGuesses(req){
+  let query = Guess.find();
+
+ /** if (Array.isArray(req.query.user_id)) {
+    const users = req.query.user_id.filter(ObjectId.isValid);
+    query = query.where('user_id').in(users);
+  } else if (ObjectId.isValid(req.query.user_id)) {
+    query = query.where('user_id').equals(req.query.user_id);
+  }**/
+
+   if (!isNaN(req.query.scoredAtLeast)) {
+    query = query.where('score').gte(req.query.scoredAtLeast);
+  }
+
+return query
+}
 
 module.exports = router;
