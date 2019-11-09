@@ -70,13 +70,7 @@ router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
 function queryGuesses(req){
   let query = Guess.find();
 
- /** if (Array.isArray(req.query.user_id)) {
-    const users = req.query.user_id.filter(ObjectId.isValid);
-    query = query.where('user_id').in(users);
-  } else if (ObjectId.isValid(req.query.user_id)) {
-    query = query.where('user_id').equals(req.query.user_id);
-  }**/
-
+//permet de filtrer via ?scoredAtLeast=x
    if (!isNaN(req.query.scoredAtLeast)) {
     query = query.where('score').gte(req.query.scoredAtLeast);
   }

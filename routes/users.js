@@ -78,35 +78,33 @@ router.post('/', function(req, res, next) {
  * @apiUse UserIncludes
  * @apiUse Pagination
  *
- * @apiParam (URL query parameters) {String} [directorId] Select only movies directed by the person with the specified ID (this parameter can be given multiple times)
- * @apiParam (URL query parameters) {Number} [rating] Select only movies with the specified rating (exact match)
- * @apiParam (URL query parameters) {Number} [ratedAtLeast] Select only movies with a rating greater than or equal to the specified rating
- * @apiParam (URL query parameters) {Number} [ratedAtMost] Select only movies with a rating lesser than or equal to the specified rating
  *
  * @apiExample Example
- *     GET /api/movies?directorId=58b2926f5e1def0123e97bc0&page=2&pageSize=50 HTTP/1.1
+ *     GET /api/users?page=2&pageSize=50 HTTP/1.1
  *
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel="first prev"
+ *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/api/users?page=1&pageSize=50&gt;; rel="first prev"
  *
- *     [
- *       {
- *         "id": "58b2926f5e1def0123e97281",
- *         "title": "Die Hard",
- *         "rating": 7.4,
- *         "directorId": "58b2926f5e1def0123e97bc0",
- *         "createdAt": "1988-07-12T00:00:00.000Z"
- *       },
- *       {
- *         "id": "58b2926f5e1def0123e97282",
- *         "title": "Die Hard With a Vengance",
- *         "rating": 8.3,
- *         "directorId": "58b2926f5e1def0123e97bc0",
- *         "createdAt": "1995-05-19T00:00:00.000Z"
- *       }
- *     ]
+ *    [
+ *   {
+ *       "_id": "5dc6b5f84080dc5e74951c66",
+ *       "username": "meme",
+ *       "created_at": "2019-11-09T14:46:20.978Z",
+ *       "totalScore": 120,
+ *       "maxScore": 10,
+ *       "averageScore": 10
+ *   },
+ *   {
+ *       "_id": "5dc43646260fc7305c7ae3fd",
+ *       "username": "pauline",
+ *       "created_at": "2019-11-09T14:46:20.979Z",
+ *       "totalScore": 48,
+ *       "maxScore": 24,
+ *       "averageScore": 24
+ *   }
+*]
  */
 
 router.get('/', function(req, res, next) {
@@ -116,6 +114,7 @@ router.get('/', function(req, res, next) {
     if (err) {
       return next(err);
     }
+
 
     // Parse pagination parameters from URL query parameters.
     const { page, pageSize } = utils.getPaginationParameters(req);
@@ -144,7 +143,7 @@ router.get('/', function(req, res, next) {
       },
       {
         $sort: {
-          obtainedScores: 1
+          username: 1
         }
       },
       {
@@ -306,10 +305,10 @@ function queryUsers(req) {
 
   let query = User.find();
 
- /** if (String(req.query.username)) {
-    const usernames = req.query.username;
-    query = query.where('username').in(usernames);
-  } */
+  if  (typeof(req.query.findByUsername) == 'string') {
+    query=query.where('username').equals(req.query.findByUsername)
+  }
+
 
   return query;
 }
