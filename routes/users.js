@@ -1,3 +1,4 @@
+const config = require('../config');
 const debug = require('debug')('geo:user');
 var express = require('express');
 var router = express.Router();
@@ -61,7 +62,10 @@ router.post('/', function(req, res, next) {
         return next(err);
       }
       // Send the saved document in the response
-      res.status(201).send(savedUser);
+      res
+        .status(201)
+        .set('Location', `${config.baseUrl}/api/users/${savedUser._id}`)
+        .send(savedUser);
     });
   });
 });

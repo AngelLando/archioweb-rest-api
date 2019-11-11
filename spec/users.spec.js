@@ -2,6 +2,8 @@ const app = require('../app');
 const { expect } = require('chai');
 const supertest = require('supertest');
 const mongoose = require('mongoose');
+var chai = require('chai');
+chai.use(require('chai-http'));
 
 const { cleanUpDatabase } = require('./utils');
 const User = require('../models/user');
@@ -20,6 +22,7 @@ describe('POST /users', function() {
         .expect(201)
         .expect('Content-Type', /json/);
 
+        expect(res).to.have.header('location');
         expect(res.body).to.be.an('object');
         expect(res.body._id).to.be.a('string');
         expect(res.body.created_at).to.be.a('string');
@@ -36,7 +39,6 @@ describe('GET /users', function() {
           User.create({ username: 'John Doe', password: '1234' }),
           User.create({ username: 'Jane Doe', password: '1234' })
         ]);
-        console.log('223');
     });
 
     it('should retrieve the list of users', async function() {
