@@ -30,7 +30,6 @@ router.post('/', function(req, res, next) {
     res.send(savedGuess);
   });
 // appeler la fonction pour envoyer un message via WebSocket
-console.log("d")
 webSocket.notifyNewGuess();
 });
 
