@@ -1,4 +1,4 @@
-const WebSocket = require('ws');
+/**const WebSocket = require('ws');
 // Create a WebSocket server that will accept connections on port 3000.
 const wss = new WebSocket.Server({
   port: 3000
@@ -11,4 +11,4 @@ wss.on('connection', function connection(ws) {
   });
   // Send something to the client.
   ws.send('something');
-});
+});**/
