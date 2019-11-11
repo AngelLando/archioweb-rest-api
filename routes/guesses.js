@@ -78,6 +78,14 @@ function queryGuesses(req){
     query = query.where('score').gte(req.query.scoredAtLeast);
   }
 
+  //permet de filtrer via ?userID=x
+   if (Array.isArray(req.query.userID)) {
+    const users = req.query.userID.filter(ObjectId.isValid);
+    query = query.where('user_id').in(users);
+  } else if (ObjectId.isValid(req.query.userID)) {
+    query = query.where('user_id').equals(req.query.userID);
+  }
+
 return query
 }
 
