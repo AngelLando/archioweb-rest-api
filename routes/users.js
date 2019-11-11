@@ -129,7 +129,10 @@ router.get('/', function(req, res, next) {
         }
       },
       {
-        $unwind: '$obtainedScores'
+        $unwind: {
+          path:'$obtainedScores',
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $group: {
