@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "cross-env MONGODB_URI=mongodb://localhost/archioweb-rest-api-test mocha spec/**/*.spec.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "chai-http": "^4.3.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -20,6 +22,10 @@
     "ws": "^7.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.3"
+    "chai": "^4.2.0",
+    "cross-env": "^6.0.3",
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.3",
+    "supertest": "^4.0.2"
   }
 }
