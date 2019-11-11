@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var guessesRouter = require('./routes/guesses');
 var thumbnailsRouter = require('./routes/thumbnails');
+var dispatcherBackend = require('./app/backend/dispatcher.js')
 
 
 var app = express();
