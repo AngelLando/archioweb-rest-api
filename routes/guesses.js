@@ -4,6 +4,7 @@ const Guess = require('../models/guess');
 const mongoose = require('mongoose');
 const debug = require('debug')('geo:guesses');
 const ObjectId = mongoose.Types.ObjectId;
+const webSocket = require('../app/backend/dispatcher')
 
 /* GET guesses listing. */
 router.get('/', function(req, res, next) {
@@ -28,6 +29,9 @@ router.post('/', function(req, res, next) {
     // Send the saved document in the response
     res.send(savedGuess);
   });
+// appeler la fonction pour envoyer un message via WebSocket
+console.log("d")
+webSocket.notifyNewGuess();
 });
 
 function loadGuessFromParamsMiddleware(req, res, next) {

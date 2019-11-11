@@ -8,11 +8,12 @@ var app = require('../app');
 var debug = require('debug')('archioweb-rest-api:server');
 var http = require('http');
 
+const { createBackendDispatcher } = require('../app/backend/dispatcher');
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3220');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -20,6 +21,8 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+createBackendDispatcher(server);
 
 /**
  * Listen on provided port, on all network interfaces.
