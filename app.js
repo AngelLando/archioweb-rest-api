@@ -15,6 +15,7 @@ var app = express();
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/archioweb-rest-api', {
+  useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -22,6 +23,11 @@ mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/archioweb-rest-a
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Log requests (except in test mode).
+if (process.env.NODE_ENV !== 'test') {
+  app.use(logger('dev'));
+}
 
 app.use(logger('dev'));
 app.use(express.json());

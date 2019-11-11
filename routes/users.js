@@ -61,7 +61,7 @@ router.post('/', function(req, res, next) {
         return next(err);
       }
       // Send the saved document in the response
-      res.send(savedUser);
+      res.status(201).send(savedUser);
     });
   });
 });
