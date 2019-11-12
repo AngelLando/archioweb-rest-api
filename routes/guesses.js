@@ -27,7 +27,10 @@ router.post('/', function(req, res, next) {
       return next(err);
     }
     // Send the saved document in the response
-    res.send(savedGuess);
+    res
+    .status(201)
+    .set('Location', `${config.baseUrl}/guesses/${savedGuess._id}`)
+    .send(savedGuess);
   });
 // appeler la fonction pour envoyer un message via WebSocket
 webSocket.notifyNewGuess();

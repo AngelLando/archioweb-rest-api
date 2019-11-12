@@ -64,7 +64,10 @@ router.post('/', function(req, res, next) {
       return next(err);
     }
     // Send the saved document in the response
-    res.send(savedThumbnail);
+    res
+    .status(201)
+    .set('Location', `${config.baseUrl}/thumbnails/${savedThumbnail._id}`)
+    .send(savedThumbnail);
   });
 });
 
