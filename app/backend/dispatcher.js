@@ -30,7 +30,11 @@ console.log("client connected");
 }
 
 exports.notifyNewGuess = function(){
+	for(let clientws in clients){
+		if (clientws) {
+			clientws.send('New guess has been posted!');
+		}
+	}
 	//dans la route ou on crée un guess, appeler cette fonction 
 	//dans cette fonction , envoyer un message à tous les clients
-	console.log("test")
 }

@@ -314,10 +314,11 @@ function userNotFound(res, userId) {
 function queryUsers(req) {
 
   let query = User.find();
-
+/** test filtre mais pas réussi
   if  (typeof(req.query.findByUsername) == 'string') {
     query=query.where('username').equals(req.query.findByUsername)
   }
+**/
 
 
   return query;
