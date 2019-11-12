@@ -54,6 +54,8 @@ describe('GET /users', function() {
         expect(res.body[0].username).to.equal('Jane Doe');
         expect(res.body[0].created_at).to.be.a('string');
         expect(res.body[0].totalScore).to.equal(0);
+        expect(res.body[0].maxScore).to.equal(null);
+        expect(res.body[0].averageScore).to.equal(null);
         expect(res.body[0]).to.have.all.keys('_id', 'username', 'created_at', 'totalScore', 'maxScore', 'averageScore');
 
         // Check that the second person is the correct one.
