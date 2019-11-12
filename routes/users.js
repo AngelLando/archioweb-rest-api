@@ -65,7 +65,7 @@ router.post('/', function(req, res, next) {
       // Send the saved document in the response
       res
         .status(201)
-        .set('Location', `${config.baseUrl}/api/users/${savedUser._id}`)
+        .set('Location', `${config.baseUrl}/users/${savedUser._id}`)
         .send(savedUser);
     });
   });
