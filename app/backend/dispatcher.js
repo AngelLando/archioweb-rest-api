@@ -20,21 +20,19 @@ console.log("client connected");
 
  ws.on('close', () => {
  	console.log("client leaving")
-      clients.delete(ws);
+    clients.splice(clients.indexOf(ws),1)
     });
 
   // Send something to the client.
-  ws.send('something');
+
 });
 
 }
 
-exports.notifyNewGuess = function(){
-	for(let clientws in clients){
+exports.notifyNewGuess = function(messageData){
+	for(let clientws of clients){
 		if (clientws) {
-			clientws.send('New guess has been posted!');
+			clientws.send(messageData);
 		}
 	}
-	//dans la route ou on crée un guess, appeler cette fonction 
-	//dans cette fonction , envoyer un message à tous les clients
 }
