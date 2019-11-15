@@ -79,3 +79,5 @@ return query
 }
 
 module.exports = router;
+
+/*--> ici on définit les chemins possibles avec les filtres si on en a mis*/
