@@ -363,7 +363,7 @@ function queryUsers(req) {
  *     }
  */
 
- /** --> ici on définit les chemins possibles avec les filtres si on en a mis
+ /**
  * @apiDefine UserIncludes
  * @apiParam (URL query parameters) {Number} [include] Embed linked resources in the response body:
  * * `"username"` for the guesses of the user
