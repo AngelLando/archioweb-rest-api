@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node ./bin/www",
-    "test": "cross-env MONGODB_URI=mongodb://localhost/archioweb-rest-api-test mocha spec/**/*.spec.js"
+    "test": "cross-env MONGODB_URI=mongodb://localhost/archioweb-rest-api-test nyc --reporter=html mocha spec/**/*.spec.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
@@ -26,6 +26,7 @@
     "cross-env": "^6.0.3",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.3",
+    "nyc": "^14.1.1",
     "supertest": "^4.0.2"
   }
 }
