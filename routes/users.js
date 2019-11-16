@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 
 /**
- * @api {post} /api/users Create a user
+ * @api {post} /users Create a user
  * @apiName CreateUser
  * @apiGroup User
  * @apiVersion 1.0.0
@@ -24,7 +24,7 @@ const secretKey = process.env.SECRET_KEY || 'changeme';
  * 
  *
  * @apiExample Example
- *     POST /api/users HTTP/1.1
+ *     POST /users HTTP/1.1
  *     Content-Type: application/json
  *
  *     {
@@ -35,16 +35,16 @@ const secretKey = process.env.SECRET_KEY || 'changeme';
  * @apiSuccessExample 201 Created
  *     HTTP/1.1 201 Created
  *     Content-Type: application/json
- *     Location: https://comem-archioweb-2019-2020-g.herokuapp.com/api/users/58b2926f5e1def0123e97281
+ *     Location: https://comem-archioweb-2019-2020-g.herokuapp.com/users/58b2926f5e1def0123e97281
  *
  *     
  *     {
  *       "_id": "5dc6b5f84080dc5e74951c66",
- *       "username": "meme",
+ *       "username": "bernard48",
  *       "created_at": "2019-11-09T13:19:37.568Z",
- *       "totalScore": 120,
- *       "maxScore": 10,
- *       "averageScore": 10
+ *       "totalScore": 0,
+ *       "maxScore": null,
+ *       "averageScore": null
  *   },
  */
 
@@ -73,26 +73,22 @@ router.post('/', function(req, res, next) {
 
 
 /**
- * @api {get} /api/users List existing users
+ * @api {get} /users/ List existing users
  * @apiName RetrieveUsers
  * @apiGroup User
  * @apiVersion 1.0.0
  * @apiDescription Retrieves a paginated list of users with their respective scores.
  *
  * @apiUse UserInResponseBody
- * @apiUse UserIncludes
  * @apiUse Pagination
- * @apiSuccess (Response body) {Number} maxScore The maximum score of the user
- * @apiSuccess (Response body) {Number} averageScore The average score of the user
- * @apiSuccess (Response body) {Number} totalScore The total score of the user
  *
  * @apiExample Example
- *     GET /api/users?page=2&pageSize=50 HTTP/1.1
+ *     GET /users?page=2&pageSize=50 HTTP/1.1
  *
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/api/users?page=1&pageSize=50&gt;; rel="first prev"
+ *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/users?page=1&pageSize=50&gt;; rel="first prev"
  *
  *    [
  *   {
@@ -192,7 +188,76 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
     });
   });
 
+/**
+ * @api {get} /users/:id Retrieve a user
+ * @apiName RetrieveUser
+ * @apiGroup User
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieves one user.
+ *
+ * @apiUse UserIdInUrlPath
+ * @apiUse UserInResponseBody
+ * @apiUse UserNotFoundError
+ *
+ * @apiExample Example
+ *     GET /users/58b2926f5e1def0123e97bc0 HTTP/1.1
+ *
+ * @apiSuccessExample 200 OK
+ *     HTTP/1.1 200 OK
+ *     Content-Type: application/json
+ *
+ *     {
+        "_id": "5dc3ceebfe75680017e1555f",
+        "username": "Biscotus",
+        "created_at": "2019-11-16T09:04:57.040Z",
+        "totalScore": 0,
+        "maxScore": null,
+        "averageScore": null
+ *     }
+ */
+
 /* PATCH a user */
+
+/**
+ * @api {patch} /users/:id Partially update a user
+ * @apiName PartiallyUpdateUser
+ * @apiGroup User
+ * @apiVersion 1.0.0
+ * @apiDescription Partially updates a user's data (only the properties found in the request body will be updated).
+ * All properties are optional.
+ *
+ * @apiUse UserIdInUrlPath
+ * @apiUse UserInRequestBody
+ * @apiUse UserInResponseBody
+ * @apiUse UserNotFoundError
+ * @apiUse UserValidationError
+ *
+ * @apiExample Example
+ *     PATCH /users/5dc3ceebfe75680017e1555f HTTP/1.1
+ *     Content-Type: application/json
+ *
+ *     {
+ *       "username": "JohnDoe22",
+ *       "password": "mybestpassword",
+ *     }
+ *
+ * @apiSuccessExample 200 OK
+ *     HTTP/1.1 200 OK
+ *     Content-Type: application/json
+ *
+ *     {
+        "_id": "5dc3ceebfe75680017e1555f",
+        "username": "JohnDoe22",
+        "created_at": "2019-11-16T09:04:57.040Z",
+        "totalScore": 65,
+        "maxScore": 24,
+        "averageScore": 16
+ *     }
+ */
+
+
+
+
 router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(req, res, next) {
 
   // Update properties present in the request body
@@ -212,6 +277,23 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(r
     res.send(savedUser);
   });
 });
+
+/**
+ * @api {delete} /users/:id Delete a user
+ * @apiName DeleteUser
+ * @apiGroup User
+ * @apiVersion 1.0.0
+ * @apiDescription Permanently deletes a user.
+ *
+ * @apiUse UserIdInUrlPath
+ * @apiUse UserNotFoundError
+ *
+ * @apiExample Example
+ *     DELETE /users/58b2926f5e1def0123e97bc0 HTTP/1.1
+ *
+ * @apiSuccessExample 204 No Content
+ *     HTTP/1.1 204 No Content
+ */
 
 /* DELETE a user */
 router.delete('/:id', loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
@@ -325,13 +407,36 @@ function queryUsers(req) {
 }
 
 /**
- * @apiDefine UserInRequestBody
+ * @apiDefine UserIdInUrlPath
  * @apiParam (URL path parameters) {String} id The unique identifier of the user to retrieve
+ */
+
+/**
+ * @apiDefine UserInRequestBody
+ * @apiParam (Request body) {String{3..20}} id The username of the user (must be unique)
+ * @apiParam (Request body) {String} password The password of the user
  */
 
  /**
  * @apiDefine UserInResponseBody
- * @apiParam (Request body) {String{3..10}} username The name of the user (must be unique)
+ * @apiSuccess (Response body) {String} id The unique identifier of the user
+ * @apiSuccess (Response body) {String} username The username of the user
+ * @apiSuccess (Response body) {String} createdAt The date at which the user was registered
+ * @apiSuccess (Response body) {String} totalScore The total score of the user 
+ * @apiSuccess (Response body) {String} maxScore The maximum score of the user 
+ * @apiSuccess (Response body) {String} averageScore The average score of the user 
+ */
+
+ /**
+ * @apiDefine UserNotFoundError
+ *
+ * @apiError {Object} 404/NotFound No user was found corresponding to the ID in the URL path
+ *
+ * @apiErrorExample {json} 404 Not Found
+ *     HTTP/1.1 404 Not Found
+ *     Content-Type: text/plain
+ *
+ *     No user found with ID 58b2926f5e1def0123e97bc0
  */
 
  /**
@@ -361,12 +466,6 @@ function queryUsers(req) {
  *         }
  *       }
  *     }
- */
-
- /**
- * @apiDefine UserIncludes
- * @apiParam (URL query parameters) {Number} [include] Embed linked resources in the response body:
- * * `"username"` for the guesses of the user
  */
 
  /**
