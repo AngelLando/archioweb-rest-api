@@ -91,8 +91,34 @@ describe('DELETE /users/:id', function(){
       .del('/users/' + user._id)
       .set('Authorization', 'Bearer ' + token)
       .expect(204)
-      
+
     expect(res.body).to.eql({});
+  });
+});
+
+/* Testing the PATCH route */
+describe('PATCH /users/id', function () {
+  let user;
+
+  beforeEach(async function() {
+    user = await User.create({ username: 'John Doe', password: '1234' });
+  });
+
+  it('should update a user', async function() {
+
+    const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
+    const claims = { sub: user._id.toString(), exp: exp };
+
+    let token = jwt.sign(claims, secretKey);
+
+    const res = await supertest(app)
+        .patch('/users/' + user._id)
+        .send({
+          username: 'John Doe PATCHED'
+        })
+        .set('Authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/);
   });
 });
   
