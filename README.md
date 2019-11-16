@@ -33,9 +33,23 @@ To automatically reload the code and re-generate the API documentation on change
 ## Real-time component
 Websocket is implemented for the real-time component. An insight message is generated on every post action for guesses. The message format is generated in JSON, like this :
 
+```
 {
-  "...": ...,
+  "_id": "5dcd247d6cf01e5e88d8ce5b",
+  "thumbnail_id": "5dc671768381e45f9443a632",
+  "user_id": "5dc4258d9ee5943eb80270a4",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      -73.856077,
+      40.848447
+    ]
+  },
+  "score": 24,
+  "created_at": "2019-11-14T09:55:09.563Z",
+  "__v": 0
 }
+```
 
 The websocket service is available at this URL :
 
