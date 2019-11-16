@@ -307,6 +307,15 @@ router.delete('/:id', loadUserFromParamsMiddleware, utils.authenticate, function
   });
 
 /* Authenticate a user */
+/**
+ * @api {post} /login Login user
+ * @apiName UserLogin
+ * @apiGroup User
+ * @apiVersion 1.0.0
+ * @apiDescription Authenticate a user.
+ * 
+ */
+
 router.post('/login', function(req, res, next) {
   User.findOne({ username: req.body.username }).exec(function(err, user) {
     if (err) {

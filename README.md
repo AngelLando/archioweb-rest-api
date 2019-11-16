@@ -20,10 +20,11 @@ Node.js 12.x
 MongoDB 4.x
 
 ## Usage
-```git clone git@github.com:AngelLando/archioweb-rest-api.git
+```
+git clone git@github.com:AngelLando/archioweb-rest-api.git
 cd archioweb-rest-api
 npm ci
-DEBUG=demo:* npm start
+npm start
 ```
 
 Visit http://localhost:3000.
@@ -66,7 +67,7 @@ Use the $DATABASE_URL or the $MONGODB_URI environment variables to specify a dif
 ## Resources
 This API allows you to work with Users, Thumbnails and Guesses:
 
-* A Thumbnail MUST have one User (who is a Person).
+* A Thumbnail MUST have one User.
 * A Guess MUST have one User and one Thumbnail.
 * A Guess CANNOT be made on a thumbnail if the user who make the guess is the same that the one who created the thumbnail.
 
