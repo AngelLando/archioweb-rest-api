@@ -24,7 +24,7 @@ const Guess = require('../models/guess');
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/thumbnails;; rel="first prev"
+ *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/thumbnails&gt;; rel="first prev"
  *
  *     [
  *       {
@@ -146,7 +146,7 @@ function loadThumbnailFromParamsMiddleware(req, res, next) {
 
   const thumbnailId = req.params.id;
   if (!ObjectId.isValid(thumbnailId)) {
-    return movieNotFound(res, thumbnailId);
+    return thumbnailNotFound(res, thumbnailId);
   }
 
   let query = Thumbnail.findById(thumbnailId)
