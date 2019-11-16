@@ -20,10 +20,11 @@ Node.js 12.x
 MongoDB 4.x
 
 ## Usage
-```git clone git@github.com:AngelLando/archioweb-rest-api.git
+```
+git clone git@github.com:AngelLando/archioweb-rest-api.git
 cd archioweb-rest-api
 npm ci
-DEBUG=demo:* npm start
+npm start
 ```
 
 Visit http://localhost:3000.
