@@ -1,18 +1,21 @@
 const app = require('../app');
-const { expect } = require('chai');
 const supertest = require('supertest');
 const mongoose = require('mongoose');
+
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY || 'changeme';
+
+const { expect } = require('chai');
 var chai = require('chai');
 chai.use(require('chai-http'));
 
 const { cleanUpDatabase } = require('./utils');
+
 const User = require('../models/user');
 
 beforeEach(cleanUpDatabase);
 
-/* Testing POST route */
+/* Testing POST user route */
 describe('POST /users', function() {
   it('should create a user', async function() {
       const res = await supertest(app)
@@ -33,10 +36,9 @@ describe('POST /users', function() {
   });
 });
 
-/* Testing GET route */
+/* Testing GET users route */
 describe('GET /users', function() {
   beforeEach(async function() {
-      // Create 2 users before retrieving the list.
       await Promise.all([
         User.create({ username: 'John Doe', password: '1234' }),
         User.create({ username: 'Jane Doe', password: '1234' })
@@ -73,7 +75,36 @@ describe('GET /users', function() {
   });
 });
 
-/* Testing the DELETE route */
+describe('GET /users/:id', function () {
+
+  let user;
+
+  beforeEach(async function () {
+    user = await User.create({ username: 'John Doe', password: '1234' });
+  });
+
+  it('should retrieve a specific user', async function () {
+    const res = await supertest(app)
+      .get('/users/' + user._id)
+      .expect(200)
+      .expect('Content-Type', /json/);
+  });
+
+  it('should not be able to retrieve a specific user with invalid id', async function () {
+    const res = await supertest(app)
+      .get('/users/abc123')
+      .expect(404)
+  });
+
+  it('should not be able to retrieve a specific user with non-existent id', async function () {
+    const res = await supertest(app)
+      .get('/users/5dd02f93dbb192272c2d28d4')
+      .expect(404)
+  });
+
+});
+
+/* Testing the DELETE user route */
 describe('DELETE /users/:id', function(){
   let user;
 
@@ -96,8 +127,8 @@ describe('DELETE /users/:id', function(){
   });
 });
 
-/* Testing the PATCH route */
-describe('PATCH /users/id', function () {
+/* Testing the PATCH users route */
+describe('PATCH /users/:id', function () {
   let user;
 
   beforeEach(async function() {
@@ -121,5 +152,24 @@ describe('PATCH /users/id', function () {
         .expect('Content-Type', /json/);
   });
 });
+
+/* Testing the login route */
+/* describe('POST /login', function() {
+  let user;
+
+  beforeEach(async function() {
+    user = await User.create({ username: 'John Doe', password: '1234'});
+  });
+
+  it('should login a user', async function() {
+      const res = await supertest(app)
+      .post('/users/login')
+      .send({
+        username: user.username,
+        password: user.password
+      })
+      .expect(200)
+  });
+}); */
   
 after(mongoose.disconnect);

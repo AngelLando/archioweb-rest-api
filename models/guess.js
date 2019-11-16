@@ -4,7 +4,6 @@ const Thumbnail = require('../models/thumbnail');
 const User = require('../models/user');
 const debug = require('debug')('geo:guesses');
 
-
 // Define the schema for users
 const guessSchema = new Schema({
 	thumbnail_id:{
@@ -14,7 +13,7 @@ const guessSchema = new Schema({
 			validator: validateThumbnailDependency,
 			message: '{VALUE} doesnt have a linked existing thumbnail'
 		}
-	} ,
+	},
 	user_id:{
 		type: Schema.Types.ObjectId,
 		required: true,
@@ -22,7 +21,7 @@ const guessSchema = new Schema({
 			validator: validateUserDependency,
 			message: '{VALUE} doesnt have a linked existing user or you are trying to comment your own post.'
 		}
-	} ,
+	},
 	location: {
 		type: {
 			type: String,
@@ -44,7 +43,6 @@ const guessSchema = new Schema({
 		min: [0, 'Score trop bas'],
 	},
 	created_at: { type: Date, default: Date.now },
-
 });
 
 // Create a geospatial index on the location property.
@@ -58,13 +56,12 @@ function validateGeoJsonCoordinates(value) {
 function validateThumbnailDependency (value){
 	//requête pour voir si l'ID est relié à qqchose
 	return Thumbnail.findOne({ _id: value }).select("id");
-
 }
-function validateUserDependency (value){
-			return Thumbnail.findOne().where('_id').equals(this.thumbnail_id).exec().then((existingThumbnail)=>{
-				return !existingThumbnail.user_id.equals(this.user_id);
-			});
 
+function validateUserDependency (value){
+	return Thumbnail.findOne().where('_id').equals(this.thumbnail_id).exec().then((existingThumbnail)=>{
+		return !existingThumbnail.user_id.equals(this.user_id);
+	});
 }
 // Create the model from the schema and export it
 module.exports = mongoose.model('Guess', guessSchema);

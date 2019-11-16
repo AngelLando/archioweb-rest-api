@@ -6,23 +6,24 @@ const User = require('../models/user');
 
 // Define the schema for users
 const thumbnailSchema = new Schema({
-  title: String,
- user_id:{
+	title: String,
+	user_id: {
 		type: Schema.Types.ObjectId,
 		required:true,
-		validate:{
+		validate: {
 			validator: validateUserDependency,
 				message: '{VALUE} doesnt have a linked existing user'
 		}
-	} ,
-  img: { data: Buffer,
-   contentType: String ,
-},
-  location: {
+	},
+	img: {
+		data: Buffer,
+		contentType: String,
+	},
+  	location: {
 	  	type: {
 			type: String,
 			required: true,
-			enum: [ 'Point' ]
+			enum: ['Point']
 		},
 		coordinates: {
 			type: [ Number ],
@@ -33,7 +34,7 @@ const thumbnailSchema = new Schema({
 			}
 		}
 	},
-  created_at: { type: Date, default: Date.now }
+  	created_at: { type: Date, default: Date.now }
 });
 
 // Create a geospatial index on the location property.
@@ -46,7 +47,7 @@ function validateGeoJsonCoordinates(value) {
 
 function validateUserDependency (value){
 	//requête pour voir si l'ID est relié à qqchose
-		return User.findOne({ _id: value }).select("id");
+	return User.findOne({ _id: value }).select("id");
 }
 
 // Create the model from the schema and export it
