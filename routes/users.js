@@ -237,8 +237,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
  *     Content-Type: application/json
  *
  *     {
- *       "username": "JohnDoe22",
- *       "password": "mybestpassword",
+ *       "username": "JohnDoe22"
  *     }
  *
  * @apiSuccessExample 200 OK

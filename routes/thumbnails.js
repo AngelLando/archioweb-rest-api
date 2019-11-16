@@ -17,7 +17,6 @@ const Guess = require('../models/guess');
  * @apiDescription Retrieves all thumbnails ordered by creation date.
  *
  * @apiUse ThumbnailInResponseBody
- * @apiUse ThumbnailIncludes
  *
  * @apiExample Example
  *     GET /thumbnails HTTP/1.1
@@ -25,22 +24,22 @@ const Guess = require('../models/guess');
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel="first prev"
+ *     Link: &lt;https://comem-archioweb-2019-2020-g.herokuapp.com/thumbnails;; rel="first prev"
  *
  *     [
  *       {
- *         "id": "58b2926f5e1def0123e97281",
- *         "title": "Beautiful landscape",
- *         "user_id": "5dbaec66b6c35e0017c82115",
- *         "location": {"type": "Point", "coordinates": [ -73.856077, 40.848447 ]},
- *         "img": "/sdcard/Images/landscape_image.jpg"
- *       }
+ *         "location":{"type":"Point","coordinates":[-73.856077,40.848447]},
+ *         "_id":"5dcfde2bb6cd1e001751bf7d",
+ *         "title":"Beautiful Landscape",
+ *         "user_id":"5dbaec66b6c35e0017c82115",
+ *         "created_at":"2019-11-16T11:31:55.232Z"
+ *       },
  *       {
- *         "id": "31b2926f5e1def0123e97282",
- *         "title": "Bâtiment historique",
- *         "user_id": "6bbaec66b6c35e0017c82131",
- *         "location": {"type": "Point", "coordinates": [ -23.856076, 47.848445 ]},
- *         "img": "/sdcard/Images/building_image.jpg"
+ *         "location":{"type":"Point","coordinates":[-73.856077,40.848447]},
+ *         "_id":"5dcfde651b7d080017510ba9",
+ *         "title":"Beautiful Landscape",
+ *         "user_id":"5dbaec66b6c35e0017c82115",
+ *         "created_at":"2019-11-16T11:32:53.375Z"
  *       }
  *     ]
  */
@@ -87,7 +86,8 @@ router.get('/', function(req, res, next) {
  *       "title": "Beautiful landscape",
  *       "user_Id": "78b2926f5e1def0123e97bc0"
  *       "location": {"type": "Point", "coordinates": [ -73.856077, 40.848447 ]},
- *       "img": "/sdcard/Images/landscape_image.jpg"
+ *       "img": "/sdcard/Images/landscape_image.jpg",
+ *       "created_at": "2019-11-16T09:04:57.040Z",
  *     }
  */
 
@@ -111,6 +111,33 @@ router.post('/', function(req, res, next) {
 
 
 /*GET one thumbnail*/
+
+/**
+ * @api {get} /thumbnails/:id Retrieve a thumbnail
+ * @apiName RetrieveThumbnail
+ * @apiGroup Thumbnail
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieves one thumbnail.
+ *
+ * @apiUse ThumbnailIdInUrlPath
+ * @apiUse ThumbnailInResponseBody
+ * @apiUse ThumbnailNotFoundError
+ *
+ * @apiExample Example
+ *     GET /thumbnails/5dbaec66b6c35e0017c82115 HTTP/1.1
+ *
+ * @apiSuccessExample 200 OK
+ *     HTTP/1.1 200 OK
+ *     Content-Type: application/json
+ *
+ *     {
+ *       "id": "5dbaec66b6c35e0017c82115",
+ *       "title": "Beautiful landscape",
+ *       "location": {"type": "Point", "coordinates": [ -73.856077, 40.848447 ]},
+ *       "img": "/sdcard/Images/landscape_image.jpg"
+ *     }
+ */
+
 router.get('/:id', loadThumbnailFromParamsMiddleware, function (req, res, next) {
   res.send(req.thumbnail);
 });
@@ -181,14 +208,49 @@ Guess.remove({ thumbnail_id:req.thumbnail._id }, function(err){
 
 
 /*PATCH thumbnail*/
+
+/**
+ * @api {patch} /thumbnails/:id Partially update a thumbnail
+ * @apiName PartiallyUpdateThumbnail
+ * @apiGroup Thumbnail
+ * @apiVersion 1.0.0
+ * @apiDescription Partially updates a thumbnail's data (only the properties found in the request body will be updated).
+ * All properties are optional.
+ *
+ * @apiUse ThumbnailIdInUrlPath
+ * @apiUse ThumbnailInRequestBodyForPatch
+ * @apiUse ThumbnailInResponseBody
+ * @apiUse ThumbnailNotFoundError
+ * @apiUse ThumbnailValidationError
+ *
+ * @apiExample Example
+ *     PATCH /thumbnails/5dcfde2bb6cd1e001751bf7d HTTP/1.1
+ *     Content-Type: application/json
+ *
+ *     {
+ *       "title": "Great view"
+ *     }
+ *
+ * @apiSuccessExample 200 OK
+ *     HTTP/1.1 200 OK
+ *     Content-Type: application/json
+ *
+ *     {
+ *       "id": "5dcfde2bb6cd1e001751bf7d",
+ *       "title": "Great view",
+ *       "user_Id": "78b2926f5e1def0123e97bc0"
+ *       "location": {"type": "Point", "coordinates": [ -73.856077, 40.848447 ]},
+ *       "img": "/sdcard/Images/landscape_image.jpg",
+ *       "created_at": "2019-11-16T09:04:57.040Z",
+ *     }
+ */
+
 router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, function (req, res, next) {
 
   // Update only properties present in the request body
   if (req.body.title !== undefined) {
     req.thumbnail.title = req.body.title;
   }
-
-
 
   req.thumbnail.save(function (err, savedThumbnail) {
     if (err) {
@@ -203,17 +265,22 @@ router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, funct
 /**
  * @apiDefine ThumbnailInRequestBody
  * @apiParam (Request body) {String} title The title of the thumbnail
- * @apiParam (Request body) {String} user_id The unique identifier of the User that create the thumbnail
+ * @apiParam (Request body) {String} user_id An Id who is referencing to the user who add the thumbnail (eg: 58b2926f5e1def0123e97bc0)
  * -- à vérifier le type : --
  * @apiParam (Request body) {String} img The path to the img of the thumbnail
  * @apiParam (Request body) {String} location The location at which the img of the thumbnail was taken
+ */
+
+ /**
+ * @apiDefine ThumbnailInRequestBodyForPatch
+ * @apiParam (Request body) {String} title The title of the thumbnail
  */
 
 /**
  * @apiDefine ThumbnailInResponseBody
  * @apiSuccess (Response body) {String} id The unique identifier of the thumbnail
  * @apiSuccess (Response body) {String} title The title of the thumbnail
- * @apiSuccess (Response body) {String} user_id The unique identifier of the User that created the thumbnail
+ * @apiSuccess (Response body) {String} user_id An Id who is referencing to the user who added the thumbnail (eg: 58b2926f5e1def0123e97bc0)
  * -- à vérifier le type : --
  * @apiSuccess (Response body) {String} img The path to the img of the thumbnail
  * @apiSuccess (Response body) {String} location The location at which the img of the thumbnail was taken
@@ -253,12 +320,6 @@ router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, funct
  /**
  * @apiDefine ThumbnailIdInUrlPath
  * @apiParam (URL path parameters) {String} id The unique identifier of the thumbnail to retrieve
- */
-
- /**
- * @apiDefine ThumbnailIncludes
- * @apiParam (URL query parameters) {String} [include] Embed linked resources in the response body:
- * * `"user"` for the thumbnail's owner
  */
 
  /**
