@@ -5,7 +5,7 @@ We can :
 
 * log in to the API
 * post thumbnails / delete thumbnails
-* make a guess on thumbnails (but the user who make the guess must be different from the user who posted the thumbnail)
+* make a guess on thumbnails
 * get the list of all users with their scores
 * find a specific user whith his scores
 * get the list of all thumbnails
@@ -30,16 +30,30 @@ Visit http://localhost:3000.
 
 To automatically reload the code and re-generate the API documentation on changes, use npm run dev instead of npm start.
 
-## Documentation
-The documentation of the API is available at the index page of the app. You can also read the documentation on-line [here](https://comem-archioweb-2019-2020-g.herokuapp.com/).
+## Real-time component
+Websocket is implemented for the real-time component. An insight message is generated on every post action for guesses. The message format is generated in JSON, like this :
+
+{
+  "...": ...,
+}
+
+The websocket service is available at this URL :
+
+ws://{PATH_to_the_application}
+For example, if you work on your machine, the path should be like this :
+
+ws://localhost:3000/
 
 ## Configuration
-The app will attempt to connect to the MongoDB database at mongodb://localhost/comem-webdev-express-rest-demo by default.
+The app will attempt to connect to the MongoDB database at mongodb://localhost/comem-archioweb-2019-2020-g by default.
 
 Use the $DATABASE_URL or the $MONGODB_URI environment variables to specify a different connection URL.
 
 ## Resources
-This API allows you to work with Movies and People:
+This API allows you to work with Users, Thumbnails and Guesses:
 
-A Movie MUST have one director (who is a Person)
-Read the full documentation to know more.
+A Thumbnail MUST have one User (who is a Person).
+A Guess MUST have one User and one Thumbnail.
+A Guess CANNOT be made on a thumbnail if the user who guess is the same that the one who created the thumbnail.
+
+Read the [full documentation](https://comem-archioweb-2019-2020-g.herokuapp.com/) to know more. The documentation of the API is also available at the index page of the app. 
