@@ -5,7 +5,7 @@ We can :
 
 * log in to the API
 * post thumbnails / delete thumbnails
-* make a guess on thumbnails (but the user who make the guess must be different from the user who posted the thumbnail)
+* make a guess on thumbnails
 * get the list of all users with their scores
 * find a specific user whith his scores
 * get the list of all thumbnails
