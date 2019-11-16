@@ -66,8 +66,8 @@ Use the $DATABASE_URL or the $MONGODB_URI environment variables to specify a dif
 ## Resources
 This API allows you to work with Users, Thumbnails and Guesses:
 
-A Thumbnail MUST have one User (who is a Person).
-A Guess MUST have one User and one Thumbnail.
-A Guess CANNOT be made on a thumbnail if the user who guess is the same that the one who created the thumbnail.
+* A Thumbnail MUST have one User (who is a Person).
+* A Guess MUST have one User and one Thumbnail.
+* A Guess CANNOT be made on a thumbnail if the user who make the guess is the same that the one who created the thumbnail.
 
 Read the [full documentation](https://comem-archioweb-2019-2020-g.herokuapp.com/) to know more. The documentation of the API is also available at the index page of the app. 
