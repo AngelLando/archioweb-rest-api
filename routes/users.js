@@ -474,6 +474,4 @@ function queryUsers(req) {
  * @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
  */
 
-
-
 module.exports = router;
