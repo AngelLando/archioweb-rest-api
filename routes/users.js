@@ -77,7 +77,7 @@ router.post('/', function(req, res, next) {
  * @apiName RetrieveUsers
  * @apiGroup User
  * @apiVersion 1.0.0
- * @apiDescription Retrieves a paginated list of users with their respective scores.
+ * @apiDescription Retrieves a paginated list of users with their respective scores and ordered by username (in alphabetical order).
  *
  * @apiUse UserInResponseBody
  * @apiUse Pagination
@@ -422,9 +422,9 @@ function queryUsers(req) {
  * @apiSuccess (Response body) {String} id The unique identifier of the user
  * @apiSuccess (Response body) {String} username The username of the user
  * @apiSuccess (Response body) {String} createdAt The date at which the user was registered
- * @apiSuccess (Response body) {String} totalScore The total score of the user 
- * @apiSuccess (Response body) {String} maxScore The maximum score of the user 
- * @apiSuccess (Response body) {String} averageScore The average score of the user 
+ * @apiSuccess (Response body) {Number} totalScore The total score of the user 
+ * @apiSuccess (Response body) {Number} maxScore The maximum score of the user 
+ * @apiSuccess (Response body) {Number} averageScore The average score of the user 
  */
 
  /**
