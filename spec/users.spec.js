@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY || 'changeme';
+const bcrypt = require('bcrypt');
 
 const { expect } = require('chai');
 var chai = require('chai');
@@ -154,11 +155,12 @@ describe('PATCH /users/:id', function () {
 });
 
 /* Testing the login route */
-/* describe('POST /login', function() {
+describe('POST /login', function() {
   let user;
+  let hash = bcrypt.hashSync('1234', 10);
 
   beforeEach(async function() {
-    user = await User.create({ username: 'John Doe', password: '1234'});
+    user = await User.create({ username: 'John Doe', password: hash});
   });
 
   it('should login a user', async function() {
@@ -166,10 +168,10 @@ describe('PATCH /users/:id', function () {
       .post('/users/login')
       .send({
         username: user.username,
-        password: user.password
+        password: '1234'
       })
       .expect(200)
   });
-}); */
+});
   
 after(mongoose.disconnect);
