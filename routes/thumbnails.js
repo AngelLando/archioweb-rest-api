@@ -267,9 +267,12 @@ router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, funct
  * @apiDefine ThumbnailInRequestBody
  * @apiParam (Request body) {String} title The title of the thumbnail
  * @apiParam (Request body) {String} user_id An Id who is referencing to the user who add the thumbnail (eg: 58b2926f5e1def0123e97bc0)
- * -- à vérifier le type : --
- * @apiParam (Request body) {String} img The path to the img of the thumbnail
- * @apiParam (Request body) {String} location The location at which the img of the thumbnail was taken
+ * @apiParam (Request body) {Object} location The location object, at which the image of the thumbnail was taken
+ * @apiParam (Request body) {String} location[type] The type of coordinates
+ * @apiParam (Request body) {Number} location[coordinates] The coordinates of the location
+ * @apiParam (Request body) {Object} img The image object of the thumbnail
+ * @apiParam (Request body) {Buffer} img[data] The data type for the image
+ * @apiParam (Request body) {String} img[contentType] The path to the image
  */
 
  /**
@@ -282,10 +285,12 @@ router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, funct
  * @apiSuccess (Response body) {String} id The unique identifier of the thumbnail
  * @apiSuccess (Response body) {String} title The title of the thumbnail
  * @apiSuccess (Response body) {String} user_id An Id who is referencing to the user who added the thumbnail (eg: 58b2926f5e1def0123e97bc0)
- * -- à vérifier le type : --
- * @apiSuccess (Response body) {String} img The path to the img of the thumbnail
- * @apiSuccess (Response body) {String} location The location at which the img of the thumbnail was taken
- * -- . --
+ * @apiSuccess (Response body) {Object} location The location object, at which the image of the thumbnail was taken
+ * @apiSuccess (Response body) {String} location[type] The type of coordinates
+ * @apiSuccess (Response body) {Number} location[coordinates] The coordinates of the location
+ * @apiSuccess (Response body) {Object} img The image object of the thumbnail
+ * @apiSuccess (Response body) {Buffer} img[data] The data type for the image
+ * @apiSuccess (Response body) {String} img[contentType] The path to the image
  * @apiSuccess (Response body) {String} createdAt The date at which the thumbnail was registered
  */
 

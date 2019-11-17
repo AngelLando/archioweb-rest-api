@@ -198,8 +198,9 @@ return query
  * @apiParam (Request body) {String} thumbnail_id An Id who is referencing to the thumbnail for which the guess is made (eg: 5dcfde651b7d080017510ba9)
  * @apiParam (Request body) {String} user_id An Id who is referencing to the user who make the guess (eg: 5dc426bb05ca0800175ab7b2)
  * @apiParam (Request body) {Number} score The score obtained by the guess
- * -- à vérifier le type : --
- * @apiParam (Request body) {String} location The location at which the guess is made
+ * @apiParam (Request body) {Object} location The location object, at which the guess is made
+ * @apiParam (Request body) {String} location[type] The type of coordinates
+ * @apiParam (Request body) {Number} location[coordinates] The coordinates of the location
  */
 
 /**
@@ -207,9 +208,9 @@ return query
  * @apiSuccess (Response body) {String} id The unique identifier of the guess
  * @apiSuccess (Response body) {String} user_id An Id who is referencing to the user who made the guess (eg: 5dc426bb05ca0800175ab7b2)
  * @apiSuccess (Response body) {String} thumbnail_id An Id who is referencing to the thumbnail for which the guess has been made (eg: 5dcfde651b7d080017510ba9)
- * -- à vérifier le type : --
- * @apiSuccess (Response body) {String} location The location at which the guess has been made
- * -- . --
+ * @apiSuccess (Response body) {Object} location The location object, at which the guess has been made
+ * @apiSuccess (Response body) {String} location[type] The type of coordinates
+ * @apiSuccess (Response body) {Number} location[coordinates] The coordinates of the location
  * @apiSuccess (Response body) {String} createdAt The date at which the guess was registered
  */
 
