@@ -3,7 +3,7 @@ Geo Guess is a RESTful API implemented with Express. It is about users who post 
 
 We can :
 
-* log in to the API
+* regisiter / authenticate to the API
 * post thumbnails / delete thumbnails
 * make a guess on thumbnails
 * get the list of all users with their scores
