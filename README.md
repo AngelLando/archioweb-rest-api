@@ -7,8 +7,9 @@ We can :
 * post thumbnails / delete thumbnails
 * make a guess on thumbnails
 * get the list of all users with their scores
-* find a specific user whith his scores
+* retrieve one specific user whith his scores
 * get the list of all thumbnails
+* retrieve one specific thumbnail
 * get the list of all guesses
 * find all the guesses that made a specific user
 * get the list of all guesses with scores higher than a specified number
