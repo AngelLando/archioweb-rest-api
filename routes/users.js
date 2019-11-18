@@ -257,7 +257,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 
 
-router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(req, res, next) {
+router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
 
   // Update properties present in the request body
   if (req.body.username !== undefined) {

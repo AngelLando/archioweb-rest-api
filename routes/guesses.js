@@ -163,7 +163,7 @@ function guessNotFound(res, guessId) {
  *     HTTP/1.1 204 No Content
  */
 
-router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
+router.delete('/:id', loadGuessFromParamsMiddleware, utils.authenticate, function (req, res, next) {
   req.guess.remove(function (err) {
     if (err) {
       return next(err);
