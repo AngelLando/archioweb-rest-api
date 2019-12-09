@@ -6,7 +6,8 @@ const debug = require('debug')('geo:guesses');
 const ObjectId = mongoose.Types.ObjectId;
 const webSocket = require('../app/backend/dispatcher')
 const config = require('../config');
-const User = require('../models/user');
+const utils = require('./utils');
+
 
 /* GET guesses listing. */
 
