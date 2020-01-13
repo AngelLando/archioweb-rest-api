@@ -16,7 +16,6 @@ const thumbnailSchema = new Schema({
 		}
 	},
 	img: {
-		data: Buffer,
 		contentType: String,
 	},
   	location: {
