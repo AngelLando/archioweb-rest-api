@@ -109,8 +109,6 @@ router.post('/', function(req, res, next) {
   });
 });
 
-
-
 /*GET one thumbnail*/
 
 /**
@@ -186,27 +184,21 @@ function thumbnailNotFound(res, thumbnailId) {
  * @apiSuccessExample 204 No Content
  *     HTTP/1.1 204 No Content
  */
-router.delete('/:id', loadThumbnailFromParamsMiddleware, function (req, res, next) {
-
-
-
+router.delete('/:id', loadThumbnailFromParamsMiddleware, utils.authenticate, function (req, res, next) {
     req.thumbnail.remove(function (err) {
       if (err) {
         return next(err);
       }
 //requête pour effacer les guess puis renvoyer 204
-Guess.remove({ thumbnail_id:req.thumbnail._id }, function(err){
-    if (err) {
+    Guess.remove({ thumbnail_id:req.thumbnail._id }, function(err){
+      if (err) {
         return next(err);
       }
-            debug(`Deleted thumbnail "${req.thumbnail.title}"`);
+      debug(`Deleted thumbnail "${req.thumbnail.title}"`);
       res.sendStatus(204);
-})
-//Character.remove({ name: 'Eddard Stark' }, function)
-
-    });
-        });
-
+    })
+  });
+});
 
 /*PATCH thumbnail*/
 
@@ -246,7 +238,7 @@ Guess.remove({ thumbnail_id:req.thumbnail._id }, function(err){
  *     }
  */
 
-router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, function (req, res, next) {
+router.patch('/:id', utils.requireJson, loadThumbnailFromParamsMiddleware, utils.authenticate, function (req, res, next) {
 
   // Update only properties present in the request body
   if (req.body.title !== undefined) {

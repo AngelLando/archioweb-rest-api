@@ -6,7 +6,8 @@ const debug = require('debug')('geo:guesses');
 const ObjectId = mongoose.Types.ObjectId;
 const webSocket = require('../app/backend/dispatcher')
 const config = require('../config');
-const User = require('../models/user');
+const utils = require('./utils');
+
 
 /* GET guesses listing. */
 
@@ -163,7 +164,7 @@ function guessNotFound(res, guessId) {
  *     HTTP/1.1 204 No Content
  */
 
-router.delete('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
+router.delete('/:id', loadGuessFromParamsMiddleware, utils.authenticate, function (req, res, next) {
   req.guess.remove(function (err) {
     if (err) {
       return next(err);

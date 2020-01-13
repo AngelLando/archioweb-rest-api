@@ -257,7 +257,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 
 
-router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, function(req, res, next) {
+router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
 
   // Update properties present in the request body
   if (req.body.username !== undefined) {
@@ -333,7 +333,7 @@ router.post('/login', function(req, res, next) {
       const claims = { sub: user._id.toString(), exp: exp };
       jwt.sign(claims, secretKey, function(err, token) {
         if (err) { return next(err); }
-        res.send({ token: token }); // Send the token to the client.
+        res.send({ token: token, user }); // Send the token to the client.
       });
     });
   })

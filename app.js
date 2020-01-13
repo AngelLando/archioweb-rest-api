@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -11,6 +12,8 @@ var thumbnailsRouter = require('./routes/thumbnails');
 var dispatcherBackend = require('./app/backend/dispatcher.js')
 
 var app = express();
+
+app.use(cors())
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/archioweb-rest-api', {
