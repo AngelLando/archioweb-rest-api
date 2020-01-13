@@ -15,9 +15,7 @@ const thumbnailSchema = new Schema({
 				message: '{VALUE} doesnt have a linked existing user'
 		}
 	},
-	img: {
-		contentType: String,
-	},
+	img:String,
   	location: {
 	  	type: {
 			type: String,
