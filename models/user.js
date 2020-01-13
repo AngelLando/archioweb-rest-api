@@ -16,6 +16,14 @@ const userSchema = new Schema({
         message:'Username {VALUE} already exists'
       }],
   },
+  city:{
+    type:String,
+    required:true
+  },
+  country:{
+    type:String,
+    required:true
+  }
   password: {
     type: String,
     required: true,
