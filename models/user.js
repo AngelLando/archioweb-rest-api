@@ -23,7 +23,7 @@ const userSchema = new Schema({
   country:{
     type:String,
     required:true
-  }
+  },
   password: {
     type: String,
     required: true,
