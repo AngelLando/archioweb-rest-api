@@ -141,6 +141,8 @@ router.get('/', function(req, res, next) {
         $group: {
           _id: '$_id',
           username: { $first: '$username' },
+          city: { $first: '$city' },
+          country: { $first: '$country' },
           createdAt: { $first: '$createdAt' },
           totalScore: { $sum: '$obtainedScores.score' },
           maxScore: { $max: '$obtainedScores.score' },
