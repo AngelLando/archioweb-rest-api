@@ -62,6 +62,10 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/:id', loadGuessFromParamsMiddleware, function (req, res, next) {
+  res.send(req.guess);
+});
+
 /* POST new guess */
 
 /**
