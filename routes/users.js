@@ -265,6 +265,12 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.auth
   if (req.body.username !== undefined) {
     req.user.username = req.body.username;
   }
+  if (req.body.country !== undefined) {
+    req.user.country = req.body.country;
+  }
+  if (req.body.city !== undefined) {
+    req.user.city = req.body.city;
+  }
   if (req.body.password !== undefined) {
     req.user.password = req.body.password;
   }
