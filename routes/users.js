@@ -185,9 +185,7 @@ router.get('/', function(req, res, next) {
 
 /* GET retrieve a user */
 router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
-    res.send({
-      ...req.user.toJSON()
-    });
+    res.send(req.user);
   });
 
 /**
@@ -259,7 +257,7 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 
 
-router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.authenticate, function(req, res, next) {
+router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.authenticate, async function(req, res, next) {
 
   // Update properties present in the request body
   if (req.body.username !== undefined) {
@@ -272,7 +270,7 @@ router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.auth
     req.user.city = req.body.city;
   }
   if (req.body.password !== undefined) {
-    req.user.password = req.body.password;
+    req.user.password = await bcrypt.hash(req.body.password, 10);
   }
 
   req.user.save(function(err, savedUser) {
