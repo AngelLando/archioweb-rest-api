@@ -259,28 +259,27 @@ router.get('/:id', loadUserFromParamsMiddleware, function(req, res, next) {
 
 router.patch('/:id', utils.requireJson, loadUserFromParamsMiddleware, utils.authenticate, async function(req, res, next) {
 
-  // Update properties present in the request body
-  if (req.body.username !== undefined) {
-    req.user.username = req.body.username;
-  }
-  if (req.body.country !== undefined) {
-    req.user.country = req.body.country;
-  }
-  if (req.body.city !== undefined) {
-    req.user.city = req.body.city;
-  }
-  if (req.body.password !== undefined) {
-    req.user.password = await bcrypt.hash(req.body.password, 10);
-  }
-
-  req.user.save(function(err, savedUser) {
-    if (err) {
-      return next(err);
+  try {
+    if (req.body.username !== undefined) {
+      req.user.username = req.body.username;
     }
-
+    if (req.body.country !== undefined) {
+      req.user.country = req.body.country;
+    }
+    if (req.body.city !== undefined) {
+      req.user.city = req.body.city;
+    }
+    if (req.body.password !== undefined) {
+      req.user.password = await bcrypt.hash(req.body.password, 10);
+    }
+    // Save the user.
+    const savedUser = await req.user.save();
     debug(`Updated user "${savedUser.username}"`);
     res.send(savedUser);
-  });
+    } catch (err) {
+    next(err);
+    }
+
 });
 
 /**
